@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { setCredientials } from "../../redux/features/auth/authSlice";
 import { toast } from "react-toastify";
-
+import loginAnimation from "../../../public/Animation - 1718391404058.json";
 import { useRegisterMutation } from "../../redux/api/usersApiSlice";
+import Lottie from "lottie-react";
+import loader from '../../../public/Animation - 1718452914517.json'
 
 export const Register = () => {
   const [username, setUserName] = useState("");
@@ -47,8 +49,10 @@ export const Register = () => {
     }
   };
   return (
-    <section className="pl-[15rem]  flex flex-wrap">
+    <section className="pl-[15rem]  flex items-center   flex-wrap">
       <div className="mr-[4rem] mt-[5rem]">
+      {isLoading &&   <Lottie className="size-60" loop={true}
+        animationData={loader}  /> }
         <h1 className="text-3xl font-semibold mb-4 text-white">Register</h1>
 
         <form onSubmit={handleSubmit} className="container w-[40rem]">
@@ -119,12 +123,13 @@ export const Register = () => {
           <button
             disabled={isLoading}
             type="submit"
-            className="bg-[#854F5C] hover:outline-dotted text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
+            className="bg-[#854F5C]  hover:bg-[#b06476de] text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
           >
             {isLoading ? "Loading.." : "Register"}
           </button>
+         
         </form>
-        {isLoading && "Loading..."}
+       
         <div className="mt-4">
           <p className="text-white">
             Already have an account?{" "}
@@ -135,8 +140,15 @@ export const Register = () => {
               Login
             </Link>
           </p>
+        
         </div>
+
       </div>
+      <Lottie
+        className="w-[45%]  xl:block  lg:hidden md:hidden hidden "
+        loop={true}
+        animationData={loginAnimation}
+      />
     </section>
   );
 };

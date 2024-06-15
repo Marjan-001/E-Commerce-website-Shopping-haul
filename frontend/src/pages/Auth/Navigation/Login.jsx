@@ -5,8 +5,9 @@ import { useLoginMutation } from "../../../redux/api/usersApiSlice";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { setCredientials } from "../../../redux/features/auth/authSlice";
-
-
+import Lottie from "lottie-react";
+import loginAnimation from "../../../../public/Animation - 1718391404058.json";
+import loader from "../../../../public/Animation - 1718452914517.json";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,20 +28,27 @@ const Login = () => {
   const submitHandle = async (e) => {
     e.preventDefault();
     try {
-        const res = await login({email,password}).unwrap();
-        dispatch(setCredientials({...res}))
-        
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredientials({ ...res }));
     } catch (error) {
-        toast.error(error?.data?.message || error.message)
+      toast.error(error?.data?.message || error.message);
     }
   };
 
   return (
     <div>
-      <section className="pl-[15rem] flex flex-wrap">
-        <div className="mr-[4rem] mt-[5rem]">
+      <section className="pl-[10rem] flex items-center   flex-wrap">
+        <div className="mr-[4rem] mt-[5rem] ">
+        {isLoading && (
+              <Lottie
+                className="size-60 flex items-center "
+                loop={true}
+                animationData={loader}
+              />
+            )}
           <h1 className="text-3xl font-semibold mb-4 text-white">Sign In</h1>
           <form onSubmit={submitHandle} className="container w-[40rem]">
+          
             <div className="my-[2rem]">
               <label
                 htmlFor="email"
@@ -77,13 +85,13 @@ const Login = () => {
             <button
               disabled={isLoading}
               type="submit"
-              className="bg-[#854F5C] hover:outline-dotted text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
+              className="bg-[#854F5C]  hover:bg-[#b06476de] text-white px-4 py-2 rounded cursor-pointer my-[1rem]"
             >
               {isLoading ? "Loading.." : "Sign In"}
             </button>
           </form>
           <div className="mt-4">
-          <p className="text-white">
+            <p className="text-white">
               New Customer?{" "}
               <Link
                 to={redirect ? `/register?redirect=${redirect}` : "/register"}
@@ -94,6 +102,11 @@ const Login = () => {
             </p>
           </div>
         </div>
+        <Lottie
+          className="w-[48%]  xl:block  lg:hidden md:hidden hidden "
+          loop={true}
+          animationData={loginAnimation}
+        />
       </section>
     </div>
   );

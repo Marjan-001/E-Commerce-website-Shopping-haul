@@ -56,7 +56,7 @@ const UserLists = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl text-center text-white font-semibold mb-4">
-        Users
+        Users Management
       </h1>
       {isLoading ? (
         <div className="flex justify-center items-center h-screen">
@@ -70,7 +70,7 @@ const UserLists = () => {
       ) : (
         <div className="flex flex-col md:flex-row">
           <table className="w-full md:w-4/5 mx-auto">
-            <thead>
+            <thead className="border-b border-b-white">
               <tr>
                 <th className="px-4 py-2  text-white text-left">ID</th>
                 <th className="px-4 py-2  text-white text-left">Name</th>

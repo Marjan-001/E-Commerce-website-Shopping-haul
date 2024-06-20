@@ -97,6 +97,7 @@ const CategoryLists = () => {
         <div className="flex flex-wrap">
           {categories?.map((category) => (
             <div key={category._id}>
+              
               <button
                 onClick={() => {
                   {
@@ -104,7 +105,7 @@ const CategoryLists = () => {
                     setSelectedCategory(category);
                     setUpdateName(category.name);
                   }
-                }}
+                }}  
                 className="bg-transparent outline outline-[#DFB6B2]  text-[#DFB6B2]  hover:bg-[#b06476de] hover:text-white py-2 px-4 rounded-lg m-3 "
               >
                 {category.name}

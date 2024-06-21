@@ -126,4 +126,103 @@ const getProducts = errorHandler(async (req, res) => {
   }
 });
 
-export { addProduct, updatingProductDetails, discardProduct, getProducts };
+// get single product
+
+const getSingleProduct = errorHandler(async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      return res.json(product);
+    } else {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+  } catch (error) {
+    res.status(404).json({ error: "Product not found" });
+  }
+});
+
+// all the products
+
+const getAllProducts = errorHandler(async (req, res) => {
+  try {
+    const products = await Product.find({})
+      .populate("category")
+      .limit(12)
+      .sort({ createdAt: -1 });
+    if (products) {
+      return res.json(products);
+    } else {
+      res.status(404);
+      throw new Error("Not found");
+    }
+  } catch (error) {
+    res.status(404).json({ error: "Failed to get products" });
+  }
+});
+
+// post review
+
+const addProductReview = errorHandler(async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      const alreadyreviewed = product.reviews.find(
+        (r) => r.user.toString() === r.user._id.toString()
+      );
+      if (alreadyreviewed) {
+        res.status(400);
+        throw new Error("Product already reviewed");
+      }
+
+      const review = {
+        name: req.user.username,
+        rating: Number(rating),
+        comment,
+        user: req.user._id,
+      };
+      product.reviews.push(review);
+      product.numReviews = product.reviews.length;
+
+      product.rating =
+        product.reviews.reduce((acc, item) => acc + item.rating, 0) /
+        product.reviews.length;
+
+      await product.save();
+      res.status(201).json({ message: "Review added" });
+    } else {
+      res.status(404);
+      throw new Error("Product not found");
+    }
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+});
+
+const fetchTopProducts = errorHandler(async (req, res) => {
+  const topProducts = await Product.find({}).sort({ rating: -1 }).limit(4);
+  res.json(topProducts);
+});
+
+const fetchNewProducts = errorHandler(async (req, res) => {
+  try {
+    const newProducts = await Product.find().sort({ _id: -1 }).limit(6);
+
+    res.json(newProducts);
+  } catch {
+    res.status(400).json(error.message);
+  }
+});
+
+export {
+  addProduct,
+  updatingProductDetails,
+  discardProduct,
+  getProducts,
+  getSingleProduct,
+  getAllProducts,
+  addProductReview,
+  fetchTopProducts,
+  fetchNewProducts,
+};
